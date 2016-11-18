@@ -10,17 +10,19 @@
 """
 import numpy as np
 
+def getData():
+    return np.random.random((20,30))
+
 class PCA:
     def __init__(self, X):
-        self.X = X
+        self.X = X # - np.mean(X)
         self.Xdash = None
 
     def train(self,k):
-        sigma = np.cov(x, rowvar=False) #(1/self.X.shape[0]) * (np.dot(self.X, self.X.T))
+        sigma = np.cov(x, rowvar=False) #(1/self.X.shape[0]) * (np.dot(self.X.T, self.X))
         v, U = np.linalg.eig(sigma)
         idx = np.argsort(v)[::-1]
-        U = U[:,idx]
-        #U = np.asarray([pairs[i][1] for i in range(len(pairs))])
+        U = U[:,idx] #= np.asarray([pairs[i][1] for i in range(len(pairs))])
         self.Xdash = np.dot(U[:, :k].T, self.X.T).T
 
     def getRep(self):
@@ -37,6 +39,7 @@ def main():
     data = getData()
     p = PCA(data)
     p.train(k) 
+    print(p.getRep())
 
 if __name__ == '__main__':
     main()
